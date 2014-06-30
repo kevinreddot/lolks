@@ -1,0 +1,173 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/chat.css"/>
+<title>lolks chat</title>
+</head>
+<body>
+<div id="container">
+<div id="chatframe"></div>
+<div id="formframe">
+<form action="/chat.py/c" onsubmit="return postmsg()" method="POST" name="m">
+    <div id="bdiv">
+	<input value="&gt;&gt;" type="submit" id="msubmit">
+	<a href="/chat.py/dailylog" id="logslink">logs</a>
+    </div>
+    <div id="mdiv">
+	<input id="msgtxt" type="text" name="msg" maxlength="300" autofocus="true" autocomplete="off">
+    </div>
+</form>
+</div>
+</div>
+<audio id="beep">
+ <source src="/img/beep.mp3">
+ <source src="/img/beep.off">
+</audio>
+</body>
+</html>
+
+<script type="text/javascript">
+
+function newreq() {
+    return window.XMLHttpRequest ? new XMLHttpRequest() :
+    new ActiveXObject("Microsoft.XMLHTTP");
+}
+
+var oldcontent = "";
+
+function readchat() {
+    req=newreq();
+    req.open('GET', 'http://lolks.ru/chat.py/b', true);  
+    req.onreadystatechange = function (aEvt) {  
+	if (req.readyState == 4) {  
+	    if(req.status == 200)  {
+		var content = req.responseText; // get content
+		// chatframe.innerHTML = req.responseText; // get contents
+		if (content != oldcontent) { // new messages arrived
+		    var chatframe = document.getElementById("chatframe");
+		    chatframe.innerHTML = content;
+		    chatframe.scrollTop = chatframe.scrollHeight; // scroll to the bottom
+		    oldcontent = content;
+		}
+	    }
+	    else { 
+		console.log("Error loading page\n");  
+
+	    }
+	}  
+    };  
+    req.send(null);  
+}
+
+function postmsg() {
+    var msgtext = document.m.msg.value;
+    if ( msgtext != "" ) { // if something is entered
+	document.getElementById("msgtxt").value="";
+	req=newreq();
+	var query = 'msg='+encodeURIComponent(msgtext);
+	//alert(query);
+	req.open('POST', 'http://lolks.ru/chat.py/submit', true);  
+	req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	req.onreadystatechange = function (aEvt) {  
+	    if (req.readyState == 4) {  
+		if(req.status == 200)  {
+		    readchat(); // refresh chat window once
+		    }
+		else { 
+		    //alert("Error submitting message\n");
+		    document.getElementById('beep').play(); // beep once
+		    }
+		}
+	    };  
+	req.send(query); 
+	}
+	return false;
+    }
+
+	function getWindowHeight() {
+	    var windowHeight = 0;
+	    if (typeof(window.innerHeight) == 'number') {
+		windowHeight = window.innerHeight;
+	    }
+	    else {
+		if (document.documentElement && document.documentElement.clientHeight) {
+		    windowHeight = document.documentElement.clientHeight;
+		}
+		else {
+		    if (document.body && document.body.clientHeight) {
+			windowHeight = document.body.clientHeight;
+		    }
+		}
+	    }
+	    return windowHeight;
+	}
+	function setContent() {
+	    if (document.getElementById) {
+		var windowHeight = getWindowHeight();
+		if (windowHeight > 0) {
+		    var contentElement = document.getElementById('container');
+		    var contentHeight = contentElement.offsetHeight;
+		    var formHeight = document.getElementById('formframe').offsetHeight;
+		    if (windowHeight - contentHeight > 0) {
+			contentElement.style.position = 'relative';
+			contentElement.style.top = ((windowHeight / 2) - (contentHeight / 2)) + 'px';
+			document.getElementById('chatframe').style.height = (contentHeight-formHeight-30) + 'px';
+		    }
+		    else {
+			contentElement.style.position = 'static';
+		    }
+		}
+	    }
+	}
+	window.onload = function() {
+	    setContent();
+	}
+	window.onresize = function() {
+	    setContent();
+	}
+
+function insert(text)
+{
+    var msgform=document.getElementById("msgtxt");
+    if(msgform)
+    {
+	if(msgform.createTextRange && msgform.caretPos) // IE
+	{
+	    var caretPos=msgform.caretPos;
+	    caretPos.text=caretPos.text.charAt(caretPos.text.length-1)==" "?text+" ":text;
+	}
+	else if(msgform.setSelectionRange) // Firefox
+	{
+	    var start=msgform.selectionStart;
+	    var end=msgform.selectionEnd;
+	    msgform.value=msgform.value.substr(0,start)+text+" "+ msgform.value.substr(end);
+	    msgform.setSelectionRange(start+text.length,start+text.length);
+	}
+	else
+	{
+	    msgform.value+=text+" ";
+	}
+	msgform.focus();
+    }
+}
+
+function ping ()
+{
+    req=newreq();
+    req.open('GET', 'http://lolks.ru/chat.py/p', true);  
+    req.onreadystatechange = function (aEvt) {  
+	if (req.readyState == 4) {  
+	    if(req.status != 200)  {
+		console.log("Error creating session\n");  
+		var chatframe = document.getElementById("chatframe");
+		chatframe.innerHTML = "<div style=\"text-align:center; padding-top: 5ex;\">Ошибка создания сессии</div>";
+	    }
+	}  
+    };  
+    req.send(null);  
+}
+
+ping();
+document.getElementById('beep').volume=0.2;
+var t = setInterval("readchat()",5000);
+readchat();
+</script>
