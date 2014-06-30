@@ -1,0 +1,129 @@
+span.nick, span.id {
+    font-weight: bold;
+    padding:0px 0.5ex;
+    -moz-border-radius: 3px; 
+    -webkit-border-radius: 3px;
+    cursor: pointer;
+}
+
+span.nick {
+    color: black;
+}
+
+img.uicon {
+    margin-right: 0.3ex;
+}
+
+div.msg {
+    margin-top: 3px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 120%;
+}
+
+div#logs {
+    border: 1px solid #999;
+    width: 90%;
+    margin: 1ex auto 2ex auto;
+    padding: 5px;
+    background-color: #e0e0e0;
+    opacity: .95;
+    z-index: 1;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+div#container {
+    border: 1px solid #999;
+    width: 90%;
+    margin: auto;
+    height: 90%;
+    padding: 5px;
+    background-color: #e0e0e0;
+    opacity: .95;
+    z-index: 1;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    font-size: 12pt;
+    /* background: black url("/img/cat-wallpaper.png") no-repeat right bottom fixed; */
+    background: black url("/img/lolks.svg") no-repeat right bottom fixed;
+}
+
+#msgtxt {
+    border: solid 1px #999;
+    width: 100%;
+}
+
+#msubmit {
+    border: solid 1px #999;
+    background-color: #eee;
+    padding: 0 3px;
+}
+
+form {
+    margin-top: 15px;
+    }
+
+img#bg {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+
+div#mdiv {
+    margin: 0 11ex 0 0;
+}
+
+div#bdiv {
+    white-space: nowrap;
+    float: right;
+    width: 10ex;
+    text-align: left;
+}
+
+div#chatframe {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+input[type=text]:focus {
+    outline: 0 none;
+}
+
+span.msgref {
+    border-bottom: dashed 1px #6666cc;
+    cursor: pointer; 
+}
+
+span.tm {
+    color: #666;
+}
+
+div.datesep {
+    border-top: 1px #666 solid;
+    margin: 5px 5px 0 5px;
+}
+
+span.date {
+    background: #666;
+    color: white;
+    float: right;
+    padding: 3px;
+    font-size: 80%;
+    -webkit-border-bottom-right-radius: 2px;
+    -webkit-border-bottom-left-radius: 2px;
+    -moz-border-radius-bottomright: 2px;
+    -moz-border-radius-bottomleft: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
